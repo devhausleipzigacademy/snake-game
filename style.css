@@ -1,5 +1,9 @@
 
-#
+#grid-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .game-grid {
     display: grid;
@@ -11,8 +15,6 @@
 
 .grid-square {
     background-color: black;
-    border: 2px;
-    border-color: gray;
     width: 20px;
     height: 20px;
 }
@@ -23,4 +25,10 @@
 
 .snake-square {
     background-color: chartreuse;
+    border: 1.5px solid gray;
+}
+
+.apple-square {
+    background-color: red;
+    border: 2px solid white;
 }
