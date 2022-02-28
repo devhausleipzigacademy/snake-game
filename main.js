@@ -22,10 +22,12 @@ for (let i = 0; i < rows; i++) {
 //// Initialize Game State ////
 ///////////////////////////////
 
+let score = 0;
+
 // array of coordinates specifying snake
 // first element is always head of snake
 // last element is tail of snake
-const snake = ['xy_11-11', 'xy_12-11', 'xy_13-11'];
+const snake = ['xy_11-11', 'xy_12-11', 'xy_13-11', 'xy_14-11', 'xy_15-11'];
 
 // top left starting
 // +1 for rows is downward, -1 is upwards
@@ -36,10 +38,12 @@ const snakeDirection = {
 }
 
 // array of coordinates specifying apples
-const [appleRow, appleColumn] = randomCoordinate(rows, columns)
-const newApple = `xy_${appleRow}-${appleColumn}`
+function getApple(){
+    const [appleRow, appleColumn] = randomCoordinate(rows, columns)
+    return `xy_${appleRow}-${appleColumn}`;
+}
 
-const apples = [newApple];
+let apples = [getApple()];
 
 
 ///////////////////////////
@@ -62,7 +66,6 @@ apples.forEach( (coordinate) => {
 // change direction of movement on arrow keys
 // need to make sure you can't move backwards
 document.addEventListener('keydown', (event) => {
-    console.log('keydown triggered!!!', event.key)
     switch (event.key){
         case 'ArrowLeft':
             snakeDirection.v = 0;
@@ -87,9 +90,6 @@ document.addEventListener('keydown', (event) => {
 // make sure apple doesn't spawn where snake already is
 
 
-// move snake in direction
-// we need to remove an old snake square from the end of the snake
-// if next snake square is out of bounds, wrap around to other side
 function moveSnake () {
     const head = snake[0]
     const tail = snake[snake.length-1]
@@ -98,31 +98,47 @@ function moveSnake () {
     const newV = Number(headVH[0]) + snakeDirection.v;
     const newH = Number(headVH[1]) + snakeDirection.h;
 
-    console.log(snakeDirection.v, snakeDirection.h)
-
+    // wrap snake around if moves out of bounds
     const newSnakeV = mod(newV, rows)
     const newSnakeH = mod(newH, columns)
 
     const newSnakeVH = `xy_${newSnakeV}-${newSnakeH}`;
-    
-    // add new snake head to snake array
-    snake.unshift(newSnakeVH)
 
     // add styling to new snake head
     const newSnakeSquare = document.querySelector(`#${newSnakeVH}`)
     styleSquare(newSnakeSquare, 'snake-square')
 
-    // remove styling from tail square
-    const tailSquare = document.querySelector(`#${tail}`)
-    styleSquare(tailSquare, 'snake-square')
+    if ( snake.includes(newSnakeSquare.id) ){
+        console.log('Snake encountered!')
+        // reset game to initial state
+        return;
+    }
 
-    // remove tail from snake array
-    snake.pop()
+    // add new snake head to snake array
+    snake.unshift(newSnakeVH)
+
+    if( apples.includes(newSnakeSquare.id) ) {
+        console.log('Apple encountered!')
+        newSnakeSquare.classList.remove('apple-square')
+        score++;
+
+        // add new apple
+        const newApple = getApple()
+        apples = [newApple];
+        const square = document.querySelector(`#${newApple}`);
+        styleSquare(square, 'apple-square')
+    } else {
+        // remove styling from tail square
+        const tailSquare = document.querySelector(`#${tail}`)
+        styleSquare(tailSquare, 'snake-square')
+
+        // remove tail from snake array
+        snake.pop()
+    }
 }
 
 // check if new snake square is already snake square
-// if new snake square is alredy snake square, reset game
-
+// if new snake square is already snake square, reset game
 // check if new snake square is already apple square
 // if new snake square is apple square, remove apple square and increase length of snake by 1
 
@@ -142,7 +158,7 @@ function gameLoop(){
     }
     const elapsed = currTime - previousTimeStamp;
 
-    if (elapsed > 300) {
+    if (elapsed > 1000) {
         updateGameState();
         previousTimeStamp = currTime
     }
