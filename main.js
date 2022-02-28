@@ -189,12 +189,11 @@ function moveSnake () {
 
         // add new apple
         const apples = generateApples();
-        console.log(apples)
         const square = document.querySelector(`#${apples[0]}`);
         styleSquare(square, 'apple-square')
 
         // increase speed
-        delay = Math.max(50, delay - 5);
+        delay = Math.max(100, delay - 5);
     } else {
         // remove styling from tail square
         const tailSquare = document.querySelector(`#${tail}`)
@@ -204,11 +203,6 @@ function moveSnake () {
         snake.pop()
     }
 }
-
-// check if new snake square is already snake square
-// if new snake square is already snake square, reset game
-// check if new snake square is already apple square
-// if new snake square is apple square, remove apple square and increase length of snake by 1
 
 
 ///////////////////
