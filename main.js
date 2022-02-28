@@ -70,32 +70,62 @@ apples.forEach( (coordinate) => {
     styleSquare(square, 'apple-square')
 })
 
-// change direction of movement on arrow keys
-// need to make sure you can't move backwards
+// change direction of movement when pressing arrow keys
+// make sure you can't move backwards
 document.addEventListener('keydown', (event) => {
     switch (event.key){
         case 'ArrowLeft':
-            snakeDirection.v = 0;
-            snakeDirection.h = -1;
+            if(snakeDirection.v == 0 && snakeDirection.h == 1) {
+                break;
+            } else {
+                snakeDirection.v = 0;
+                snakeDirection.h = -1;
+            }
             break;
         case 'ArrowUp':
-            snakeDirection.v = -1;
-            snakeDirection.h = 0;
+            if(snakeDirection.v == 1 && snakeDirection.h == 0) {
+                break;
+            } else {
+                snakeDirection.v = -1;
+                snakeDirection.h = 0;
+            }
             break;
         case 'ArrowRight':
-            snakeDirection.v = 0;
-            snakeDirection.h = 1;
+            if(snakeDirection.v == 0 && snakeDirection.h == -1) {
+                break;
+            } else {
+                snakeDirection.v = 0;
+                snakeDirection.h = 1;
+            }
             break;
         case 'ArrowDown':
-            snakeDirection.v = 1;
-            snakeDirection.h = 0;
+            if(snakeDirection.v == -1 && snakeDirection.h == 0) {
+                break;
+            } else {
+                snakeDirection.v = 1;
+                snakeDirection.h = 0;
+            }
             break;
-    } 
+    }
 })
 
 // generate apples if there are no apples
 // make sure apple doesn't spawn where snake already is
+function generateApples() {
+    let again = true;
 
+    while(again){
+        const newApple =  getApple();
+
+        if ( snake.includes(newApple) ){
+            continue;
+        } else {
+            again = false;
+            apples = [newApple]
+        }
+    }
+    return apples
+}
 
 function moveSnake () {
     const head = snake[0]
@@ -158,9 +188,9 @@ function moveSnake () {
         score++;
 
         // add new apple
-        const newApple = getApple()
-        apples = [newApple];
-        const square = document.querySelector(`#${newApple}`);
+        const apples = generateApples();
+        console.log(apples)
+        const square = document.querySelector(`#${apples[0]}`);
         styleSquare(square, 'apple-square')
 
         // increase speed

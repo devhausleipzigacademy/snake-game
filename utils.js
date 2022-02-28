@@ -4,7 +4,7 @@ function mod(n, m) {
 }
 
 function randomNumber(range) {
-    return Math.round( (Math.random()*range) );
+    return Math.floor( (Math.random()*range) );
 }
 
 function randomCoordinate(xRange, yRange){
