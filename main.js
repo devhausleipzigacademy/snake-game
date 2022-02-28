@@ -48,10 +48,7 @@ const apples = [newApple];
 
 // color snake squares
 snake.forEach( (coordinate) => {
-    console.log(coordinate)
     const square = document.querySelector(`#${coordinate}`);
-
-    console.log(square)
     styleSquare(square, 'snake-square')
 })
 
@@ -64,6 +61,27 @@ apples.forEach( (coordinate) => {
 
 // change direction of movement on arrow keys
 // need to make sure you can't move backwards
+document.addEventListener('keydown', (event) => {
+    console.log('keydown triggered!!!', event.key)
+    switch (event.key){
+        case 'ArrowLeft':
+            snakeDirection.v = 0;
+            snakeDirection.h = -1;
+            break;
+        case 'ArrowUp':
+            snakeDirection.v = -1;
+            snakeDirection.h = 0;
+            break;
+        case 'ArrowRight':
+            snakeDirection.v = 0;
+            snakeDirection.h = 1;
+            break;
+        case 'ArrowDown':
+            snakeDirection.v = 1;
+            snakeDirection.h = 0;
+            break;
+    } 
+})
 
 // generate apples if there are no apples
 // make sure apple doesn't spawn where snake already is
@@ -79,7 +97,8 @@ function moveSnake () {
     const headVH = head.replace('xy_', '').split('-');
     const newV = Number(headVH[0]) + snakeDirection.v;
     const newH = Number(headVH[1]) + snakeDirection.h;
-    console.log(newV, newH)
+
+    console.log(snakeDirection.v, snakeDirection.h)
 
     const newSnakeV = mod(newV, rows)
     const newSnakeH = mod(newH, columns)
@@ -123,9 +142,7 @@ function gameLoop(){
     }
     const elapsed = currTime - previousTimeStamp;
 
-    console.log('elapse', elapsed)
-
-    if (elapsed > 1000) {
+    if (elapsed > 300) {
         updateGameState();
         previousTimeStamp = currTime
     }
@@ -138,7 +155,6 @@ function gameLoop(){
 }
 
 function updateGameState(){
-    console.log('Hello!')
     // call checks and transitions here
     moveSnake()
 }
