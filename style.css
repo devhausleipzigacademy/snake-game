@@ -7,9 +7,9 @@
 
 .game-grid {
     display: grid;
-    width: 400px;
-    height: 400px;
-    grid-template-columns: repeat(20, 1fr);
+    width: 420px;
+    height: 420px;
+    grid-template-columns: repeat(21, 1fr);
     background-color: black;
 }
 
