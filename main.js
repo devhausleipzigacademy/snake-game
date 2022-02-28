@@ -22,6 +22,8 @@ for (let i = 0; i < rows; i++) {
 //// Initialize Game State ////
 ///////////////////////////////
 
+const defaultDelay = 200; // ms
+
 // array of coordinates specifying snake
 // first element is always head of snake
 // last element is tail of snake
@@ -43,7 +45,9 @@ function getApple(){
 
 // sound effects
 const appleBite = new Audio('assets/audio/apple-bite.mp3');
+appleBite.playbackRate = 1.5;
 
+let delay = defaultDelay;
 let score = 0;
 let apples = [getApple()];
 let snake = defaultSnake.slice(0)
@@ -126,6 +130,7 @@ function moveSnake () {
         snake = defaultSnake.slice(0);
         snakeDirection = Object.assign({}, defaultSnakeDirection);
         score = 0;
+        delay = defaultDelay;
         // style new snake
         snake.forEach( (coordinate) => {
             const square = document.querySelector(`#${coordinate}`);
@@ -157,6 +162,9 @@ function moveSnake () {
         apples = [newApple];
         const square = document.querySelector(`#${newApple}`);
         styleSquare(square, 'apple-square')
+
+        // increase speed
+        delay = Math.max(50, delay - 5);
     } else {
         // remove styling from tail square
         const tailSquare = document.querySelector(`#${tail}`)
@@ -188,7 +196,7 @@ function gameLoop(){
     }
     const elapsed = currTime - previousTimeStamp;
 
-    if (elapsed > 200) {
+    if (elapsed > delay) {
         updateGameState();
         previousTimeStamp = currTime
     }

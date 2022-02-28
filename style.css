@@ -32,4 +32,36 @@
 .apple-square {
     background-color: red;
     border: 2px solid white;
+    border-radius: 35%;
+}
+
+.apple-square::before{
+    content: "";
+    width: 6px;
+    height: 7px;
+    border-radius: 20%;
+    z-index: 1;
+    position: absolute;
+    transform: translate(4px, -7px);
+    background-color: green;
+}
+
+.apple-square::after{
+    content: "";
+    width: 4px;
+    height: 12px;
+    position: absolute;
+    transform: skew(20deg) translate(5px, -7px);
+    background-color: brown;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title h2 {
+    display: block;
 }
