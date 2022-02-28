@@ -22,17 +22,15 @@ for (let i = 0; i < rows; i++) {
 //// Initialize Game State ////
 ///////////////////////////////
 
-let score = 0;
-
 // array of coordinates specifying snake
 // first element is always head of snake
 // last element is tail of snake
-const snake = ['xy_11-11', 'xy_12-11', 'xy_13-11', 'xy_14-11', 'xy_15-11'];
+const defaultSnake = ['xy_11-11', 'xy_12-11', 'xy_13-11'];
 
 // top left starting
 // +1 for rows is downward, -1 is upwards
 // +1 for columns is rightward, -1 is leftward
-const snakeDirection = {
+const defaultSnakeDirection = {
     "v": -1,
     "h": 0
 }
@@ -43,8 +41,13 @@ function getApple(){
     return `xy_${appleRow}-${appleColumn}`;
 }
 
-let apples = [getApple()];
+// sound effects
+const appleBite = new Audio('assets/audio/apple-bite.mp3');
 
+let score = 0;
+let apples = [getApple()];
+let snake = defaultSnake.slice(0)
+let snakeDirection = Object.assign({}, defaultSnakeDirection);
 
 ///////////////////////////
 //// State Transitions ////
@@ -106,19 +109,46 @@ function moveSnake () {
 
     // add styling to new snake head
     const newSnakeSquare = document.querySelector(`#${newSnakeVH}`)
-    styleSquare(newSnakeSquare, 'snake-square')
 
     if ( snake.includes(newSnakeSquare.id) ){
         console.log('Snake encountered!')
-        // reset game to initial state
+        // reset styling of existing snake
+        snake.forEach( (coordinate) => {
+            const square = document.querySelector(`#${coordinate}`);
+            styleSquare(square, 'snake-square')
+        })
+        // reset styling of existing apple
+        apples.forEach( (coordinate) => {
+            const square = document.querySelector(`#${coordinate}`);
+            styleSquare(square, 'apple-square')
+        })
+        // reset state to defaults
+        snake = defaultSnake.slice(0);
+        snakeDirection = Object.assign({}, defaultSnakeDirection);
+        score = 0;
+        // style new snake
+        snake.forEach( (coordinate) => {
+            const square = document.querySelector(`#${coordinate}`);
+            styleSquare(square, 'snake-square')
+        })
+        // style new apples
+        apples.forEach( (coordinate) => {
+            const square = document.querySelector(`#${coordinate}`);
+            styleSquare(square, 'apple-square')
+        })
         return;
     }
 
+    // style new snake head
+    styleSquare(newSnakeSquare, 'snake-square')
     // add new snake head to snake array
     snake.unshift(newSnakeVH)
 
     if( apples.includes(newSnakeSquare.id) ) {
         console.log('Apple encountered!')
+
+        appleBite.play()
+
         newSnakeSquare.classList.remove('apple-square')
         score++;
 
@@ -158,7 +188,7 @@ function gameLoop(){
     }
     const elapsed = currTime - previousTimeStamp;
 
-    if (elapsed > 1000) {
+    if (elapsed > 200) {
         updateGameState();
         previousTimeStamp = currTime
     }
@@ -173,6 +203,7 @@ function gameLoop(){
 function updateGameState(){
     // call checks and transitions here
     moveSnake()
+    document.querySelector('#score > span').innerHTML = score;
 }
 
 gameLoop();
