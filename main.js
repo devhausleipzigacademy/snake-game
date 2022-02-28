@@ -8,8 +8,8 @@ const messages = document.querySelector('#messages')
 const rows = 21;
 const columns = 21;
 
-for (let i = 1; i <= rows; i++) {
-    for (let j = 1; j <= columns; j++) {
+for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < columns; j++) {
         const gridSquare = document.createElement('div');
         gridSquare.id = `xy_${i}-${j}`
         gridSquare.classList.add('grid-square')
@@ -31,8 +31,8 @@ const snake = ['xy_11-11', 'xy_12-11', 'xy_13-11'];
 // +1 for rows is downward, -1 is upwards
 // +1 for columns is rightward, -1 is leftward
 const snakeDirection = {
-    "vertical": -1,
-    "horizontal": 0
+    "v": -1,
+    "h": 0
 }
 
 // array of coordinates specifying apples
@@ -63,40 +63,42 @@ apples.forEach( (coordinate) => {
 })
 
 // change direction of movement on arrow keys
+// need to make sure you can't move backwards
 
 // generate apples if there are no apples
 // make sure apple doesn't spawn where snake already is
 
+
 // move snake in direction
 // we need to remove an old snake square from the end of the snake
 // if next snake square is out of bounds, wrap around to other side
-const head = snake[0]
-const tail = snake[snake.length-1]
+function moveSnake () {
+    const head = snake[0]
+    const tail = snake[snake.length-1]
 
-switch (`${snakeDirection.vertical},${snakeDirection.horizontal}`) {
-    case '-1,0':
-        // const headXY = head.replace('xy_', '').split('-');
-        // const newSnakeY = headXY[0];
-        // const newSnakeX = headXY[1];
-        // const newSnakeXY = `xy_${newSnakeY-1}-${newSnakeX}`;
+    const headVH = head.replace('xy_', '').split('-');
+    const newV = Number(headVH[0]) + snakeDirection.v;
+    const newH = Number(headVH[1]) + snakeDirection.h;
+    console.log(newV, newH)
 
-        // // add styling to new snake head
-        // const newSnakeSquare = document.querySelector(`#${newSnakeXY}`)
-        // styleSquare(newSnakeSquare, 'snake-square')
+    const newSnakeV = mod(newV, rows)
+    const newSnakeH = mod(newH, columns)
 
-        // // remove styling from tail square
-        // const tailSquare = document.querySelector(`#${tail}`)
-        // styleSquare(tailSquare, 'snake-square')
+    const newSnakeVH = `xy_${newSnakeV}-${newSnakeH}`;
+    
+    // add new snake head to snake array
+    snake.unshift(newSnakeVH)
 
-        // // remove tail from snake array
-        // snake.pop()
-        break;
-    case '1, 0':
-        break;
-    case '0, -1':
-        break;
-    case '0, 1':
-        break;
+    // add styling to new snake head
+    const newSnakeSquare = document.querySelector(`#${newSnakeVH}`)
+    styleSquare(newSnakeSquare, 'snake-square')
+
+    // remove styling from tail square
+    const tailSquare = document.querySelector(`#${tail}`)
+    styleSquare(tailSquare, 'snake-square')
+
+    // remove tail from snake array
+    snake.pop()
 }
 
 // check if new snake square is already snake square
@@ -110,11 +112,35 @@ switch (`${snakeDirection.vertical},${snakeDirection.horizontal}`) {
 //// Game Loop ////
 ///////////////////
 
-function gameLoop() {
-    // call checks and transitions here
+let previousTimeStamp;
+let done = false
 
-    setInterval(gameLoop, 100)
+function gameLoop(){
+    const currTime = new Date().getTime();
+
+    if (previousTimeStamp === undefined) {
+        previousTimeStamp = currTime;
+    }
+    const elapsed = currTime - previousTimeStamp;
+
+    console.log('elapse', elapsed)
+
+    if (elapsed > 1000) {
+        updateGameState();
+        previousTimeStamp = currTime
+    }
+
+    if(!done){
+        window.requestAnimationFrame(gameLoop);
+    } else {
+        return;
+    }
+}
+
+function updateGameState(){
+    console.log('Hello!')
+    // call checks and transitions here
+    moveSnake()
 }
 
 gameLoop();
-
