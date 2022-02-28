@@ -1,0 +1,26 @@
+
+#
+
+.game-grid {
+    display: grid;
+    width: 400px;
+    height: 400px;
+    grid-template-columns: repeat(20, 1fr);
+    background-color: black;
+}
+
+.grid-square {
+    background-color: black;
+    border: 2px;
+    border-color: gray;
+    width: 20px;
+    height: 20px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.snake-square {
+    background-color: chartreuse;
+}
