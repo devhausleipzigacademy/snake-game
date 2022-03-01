@@ -43,6 +43,8 @@ function getApple(){
     return `xy_${appleRow}-${appleColumn}`;
 }
 
+document.querySelector("#music").loop = true;
+
 // sound effects
 const appleBite = new Audio('assets/audio/apple-bite.mp3');
 appleBite.playbackRate = 1.5;

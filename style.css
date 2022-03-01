@@ -1,3 +1,6 @@
+* {
+    box-sizing: border-box;
+}
 
 #grid-wrapper {
     display: flex;
@@ -18,10 +21,6 @@
     background-color: black;
     width: 20px;
     height: 20px;
-}
-
-* {
-    box-sizing: border-box;
 }
 
 .snake-square {
@@ -64,4 +63,8 @@
 
 .title h2 {
     display: block;
+}
+
+#music {
+    padding: 1rem;
 }
