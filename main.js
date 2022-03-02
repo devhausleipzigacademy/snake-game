@@ -43,6 +43,23 @@ function getApple(){
     return `xy_${appleRow}-${appleColumn}`;
 }
 
+function generateApples() {
+    let again = true;
+    const apples = []
+
+    while(again){
+        const newApple =  getApple();
+
+        if ( snake.includes(newApple) ){
+            continue;
+        } else {
+            again = false;
+            apples.push(newApple)
+        }
+    }
+    return apples
+}
+
 document.querySelector("#music").loop = true;
 
 // sound effects
@@ -51,9 +68,9 @@ appleBite.playbackRate = 1.5;
 
 let delay = defaultDelay;
 let score = 0;
-let apples = [getApple()];
 let snake = defaultSnake.slice(0)
 let snakeDirection = Object.assign({}, defaultSnakeDirection);
+let apples = generateApples();
 
 ///////////////////////////
 //// State Transitions ////
@@ -110,24 +127,6 @@ document.addEventListener('keydown', (event) => {
             break;
     }
 })
-
-// generate apples if there are no apples
-// make sure apple doesn't spawn where snake already is
-function generateApples() {
-    let again = true;
-
-    while(again){
-        const newApple =  getApple();
-
-        if ( snake.includes(newApple) ){
-            continue;
-        } else {
-            again = false;
-            apples = [newApple]
-        }
-    }
-    return apples
-}
 
 function moveSnake () {
     const head = snake[0]
@@ -190,7 +189,7 @@ function moveSnake () {
         score++;
 
         // add new apple
-        const apples = generateApples();
+        apples = generateApples();
         const square = document.querySelector(`#${apples[0]}`);
         styleSquare(square, 'apple-square')
 
