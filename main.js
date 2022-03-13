@@ -214,22 +214,11 @@ let previousTimeStamp;
 let done = false
 
 function gameLoop(){
-    const currTime = new Date().getTime();
-
-    if (previousTimeStamp === undefined) {
-        previousTimeStamp = currTime;
-    }
-    const elapsed = currTime - previousTimeStamp;
-
-    if (elapsed > delay) {
-        updateGameState();
-        previousTimeStamp = currTime
-    }
-
     if(!done){
-        window.requestAnimationFrame(gameLoop);
-    } else {
-        return;
+        updateGameState();
+        setTimeout( () => {
+            window.requestAnimationFrame(gameLoop)
+        }, delay);
     }
 }
 
