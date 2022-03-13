@@ -210,7 +210,6 @@ function moveSnake () {
 //// Game Loop ////
 ///////////////////
 
-let previousTimeStamp;
 let done = false
 
 function gameLoop(){
