@@ -11,12 +11,12 @@ const rows = 21;
 const columns = 21;
 
 for (let i = 0; i < rows; i++) {
-    for (let j = 0; j < columns; j++) {
-        const gridSquare = document.createElement("div");
-        gridSquare.id = `xy_${i}-${j}`;
-        gridSquare.classList.add("grid-square");
-        snakeGrid.appendChild(gridSquare);
-    }
+	for (let j = 0; j < columns; j++) {
+		const gridSquare = document.createElement("div");
+		gridSquare.id = `xy_${i}-${j}`;
+		gridSquare.classList.add("grid-square");
+		snakeGrid.appendChild(gridSquare);
+	}
 }
 
 ///////////////////////////////
@@ -34,31 +34,31 @@ const defaultSnake = ["xy_11-11", "xy_12-11", "xy_13-11"];
 // +1 for rows is downward, -1 is upwards
 // +1 for columns is rightward, -1 is leftward
 const defaultSnakeDirection = {
-    v: -1,
-    h: 0,
+	v: -1,
+	h: 0
 };
 
 // array of coordinates specifying apples
 function getApple() {
-    const [appleRow, appleColumn] = randomCoordinate(rows, columns);
-    return `xy_${appleRow}-${appleColumn}`;
+	const [appleRow, appleColumn] = randomCoordinate(rows, columns);
+	return `xy_${appleRow}-${appleColumn}`;
 }
 
 function generateApples() {
-    let again = true;
-    const apples = [];
+	let again = true;
+	const apples = [];
 
-    while (again) {
-        const newApple = getApple();
+	while (again) {
+		const newApple = getApple();
 
-        if (snake.includes(newApple)) {
-            continue;
-        } else {
-            again = false;
-            apples.push(newApple);
-        }
-    }
-    return apples;
+		if (snake.includes(newApple)) {
+			continue;
+		} else {
+			again = false;
+			apples.push(newApple);
+		}
+	}
+	return apples;
 }
 
 document.querySelector("#music").loop = true;
@@ -79,130 +79,130 @@ let apples = generateApples();
 
 // color snake squares
 snake.forEach((coordinate) => {
-    const square = document.querySelector(`#${coordinate}`);
-    styleSquare(square, "snake-square");
+	const square = document.querySelector(`#${coordinate}`);
+	styleSquare(square, "snake-square");
 });
 
 // color apple squares
 apples.forEach((coordinate) => {
-    const square = document.querySelector(`#${coordinate}`);
-    styleSquare(square, "apple-square");
+	const square = document.querySelector(`#${coordinate}`);
+	styleSquare(square, "apple-square");
 });
 
 // change direction of movement when pressing arrow keys
 // make sure you can't move backwards
 document.addEventListener("keydown", (event) => {
-    switch (event.key) {
-        case "ArrowLeft":
-            if (snakeDirection.v == 0 && snakeDirection.h == 1) {
-                break;
-            } else {
-                snakeDirection.v = 0;
-                snakeDirection.h = -1;
-            }
-            break;
-        case "ArrowUp":
-            if (snakeDirection.v == 1 && snakeDirection.h == 0) {
-                break;
-            } else {
-                snakeDirection.v = -1;
-                snakeDirection.h = 0;
-            }
-            break;
-        case "ArrowRight":
-            if (snakeDirection.v == 0 && snakeDirection.h == -1) {
-                break;
-            } else {
-                snakeDirection.v = 0;
-                snakeDirection.h = 1;
-            }
-            break;
-        case "ArrowDown":
-            if (snakeDirection.v == -1 && snakeDirection.h == 0) {
-                break;
-            } else {
-                snakeDirection.v = 1;
-                snakeDirection.h = 0;
-            }
-            break;
-    }
+	switch (event.key) {
+		case "ArrowLeft":
+			if (snakeDirection.v == 0 && snakeDirection.h == 1) {
+				break;
+			} else {
+				snakeDirection.v = 0;
+				snakeDirection.h = -1;
+			}
+			break;
+		case "ArrowUp":
+			if (snakeDirection.v == 1 && snakeDirection.h == 0) {
+				break;
+			} else {
+				snakeDirection.v = -1;
+				snakeDirection.h = 0;
+			}
+			break;
+		case "ArrowRight":
+			if (snakeDirection.v == 0 && snakeDirection.h == -1) {
+				break;
+			} else {
+				snakeDirection.v = 0;
+				snakeDirection.h = 1;
+			}
+			break;
+		case "ArrowDown":
+			if (snakeDirection.v == -1 && snakeDirection.h == 0) {
+				break;
+			} else {
+				snakeDirection.v = 1;
+				snakeDirection.h = 0;
+			}
+			break;
+	}
 });
 
 function moveSnake() {
-    const head = snake[0];
-    const tail = snake[snake.length - 1];
+	const head = snake[0];
+	const tail = snake[snake.length - 1];
 
-    const headVH = head.replace("xy_", "").split("-");
-    const newV = Number(headVH[0]) + snakeDirection.v;
-    const newH = Number(headVH[1]) + snakeDirection.h;
+	const headVH = head.replace("xy_", "").split("-");
+	const newV = Number(headVH[0]) + snakeDirection.v;
+	const newH = Number(headVH[1]) + snakeDirection.h;
 
-    // wrap snake around if moves out of bounds
-    const newSnakeV = mod(newV, rows);
-    const newSnakeH = mod(newH, columns);
+	// wrap snake around if moves out of bounds
+	const newSnakeV = mod(newV, rows);
+	const newSnakeH = mod(newH, columns);
 
-    const newSnakeVH = `xy_${newSnakeV}-${newSnakeH}`;
+	const newSnakeVH = `xy_${newSnakeV}-${newSnakeH}`;
 
-    // add styling to new snake head
-    const newSnakeSquare = document.querySelector(`#${newSnakeVH}`);
+	// add styling to new snake head
+	const newSnakeSquare = document.querySelector(`#${newSnakeVH}`);
 
-    if (snake.includes(newSnakeSquare.id)) {
-        console.log("Snake encountered!");
-        // reset styling of existing snake
-        snake.forEach((coordinate) => {
-            const square = document.querySelector(`#${coordinate}`);
-            styleSquare(square, "snake-square");
-        });
-        // reset styling of existing apple
-        apples.forEach((coordinate) => {
-            const square = document.querySelector(`#${coordinate}`);
-            styleSquare(square, "apple-square");
-        });
-        // reset state to defaults
-        snake = defaultSnake.slice(0);
-        snakeDirection = Object.assign({}, defaultSnakeDirection);
-        score = 0;
-        delay = defaultDelay;
-        // style new snake
-        snake.forEach((coordinate) => {
-            const square = document.querySelector(`#${coordinate}`);
-            styleSquare(square, "snake-square");
-        });
-        // style new apples
-        apples.forEach((coordinate) => {
-            const square = document.querySelector(`#${coordinate}`);
-            styleSquare(square, "apple-square");
-        });
-        return;
-    }
+	if (snake.includes(newSnakeSquare.id)) {
+		console.log("Snake encountered!");
+		// reset styling of existing snake
+		snake.forEach((coordinate) => {
+			const square = document.querySelector(`#${coordinate}`);
+			styleSquare(square, "snake-square");
+		});
+		// reset styling of existing apple
+		apples.forEach((coordinate) => {
+			const square = document.querySelector(`#${coordinate}`);
+			styleSquare(square, "apple-square");
+		});
+		// reset state to defaults
+		snake = defaultSnake.slice(0);
+		snakeDirection = Object.assign({}, defaultSnakeDirection);
+		score = 0;
+		delay = defaultDelay;
+		// style new snake
+		snake.forEach((coordinate) => {
+			const square = document.querySelector(`#${coordinate}`);
+			styleSquare(square, "snake-square");
+		});
+		// style new apples
+		apples.forEach((coordinate) => {
+			const square = document.querySelector(`#${coordinate}`);
+			styleSquare(square, "apple-square");
+		});
+		return;
+	}
 
-    // style new snake head
-    styleSquare(newSnakeSquare, "snake-square");
-    // add new snake head to snake array
-    snake.unshift(newSnakeVH);
+	// style new snake head
+	styleSquare(newSnakeSquare, "snake-square");
+	// add new snake head to snake array
+	snake.unshift(newSnakeVH);
 
-    if (apples.includes(newSnakeSquare.id)) {
-        console.log("Apple encountered!");
+	if (apples.includes(newSnakeSquare.id)) {
+		console.log("Apple encountered!");
 
-        appleBite.play();
+		appleBite.play();
 
-        newSnakeSquare.classList.remove("apple-square");
-        score++;
+		newSnakeSquare.classList.remove("apple-square");
+		score++;
 
-        // add new apple
-        apples = generateApples();
-        const square = document.querySelector(`#${apples[0]}`);
-        styleSquare(square, "apple-square");
+		// add new apple
+		apples = generateApples();
+		const square = document.querySelector(`#${apples[0]}`);
+		styleSquare(square, "apple-square");
 
-        // increase speed
-        delay = Math.max(100, delay - 5);
-    } else {
-        // remove styling from tail square
-        const tailSquare = document.querySelector(`#${tail}`);
-        styleSquare(tailSquare, "snake-square");
+		// increase speed
+		delay = Math.max(100, delay - 5);
+	} else {
+		// remove styling from tail square
+		const tailSquare = document.querySelector(`#${tail}`);
+		styleSquare(tailSquare, "snake-square");
 
-        // remove tail from snake array
-        snake.pop();
-    }
+		// remove tail from snake array
+		snake.pop();
+	}
 }
 
 ///////////////////
@@ -212,18 +212,33 @@ function moveSnake() {
 let done = false;
 
 function gameLoop() {
-    if (!done) {
-        updateGameState();
-        setTimeout(() => {
-            window.requestAnimationFrame(gameLoop);
-        }, delay);
-    }
+	if (!done) {
+		updateGameState();
+		setTimeout(() => {
+			window.requestAnimationFrame(gameLoop);
+		}, delay);
+	}
 }
 
 function updateGameState() {
-    // call checks and transitions here
-    moveSnake();
-    document.querySelector("#score > span").innerHTML = score;
+	// call checks and transitions here
+	moveSnake();
+	document.querySelector("#score > span").innerHTML = score;
 }
 
 gameLoop();
+
+// prevent scrolling when using arrow keys
+window.addEventListener("keydown", function (event) {
+	const keysDisabledDefault = [
+		"Space",
+		"ArrowUp",
+		"ArrowDown",
+		"ArrowLeft",
+		"ArrowRight"
+	];
+
+	if (keysDisabledDefault.includes(event.key)) {
+		event.preventDefault();
+	}
+});
